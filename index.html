@@ -63,22 +63,63 @@
 
             box-shadow: 0px 0px 3px 0px gray;
         }
-        .mybtn{
-            margin-top : 20px;
+
+        .mybtn {
+            margin-top: 20px;
             display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: center;
 
         }
-        .mybtn>button{
-            margin-right : 10px;
+
+        .mybtn>button {
+            margin-right: 10px;
         }
     </style>
+    <script>
+
+        $(document).ready(function () {
+            fetch("http://spartacodingclub.shop/sparta_api/weather/seoul").then(res => res.json()).then(data => {
+                let temperature = data['temp']
+                $('#temp').text(temperature)
+            })
+            $('#cards').empty()
+
+            fetch("http://spartacodingclub.shop/web/api/movie").then(res => res.json()).then(data => {
+                let rows = data['movies']
+                rows.forEach((a) => {
+                    let comment = a['comment']
+                    let desc = a['desc']
+                    let img = a['image']
+                    let star = a['star']
+                    let title = a['title']
+
+                    let star_image = '⭐'.repeat(star)
+
+                    let temp_html = `<div class="col">
+                        <div class="card">
+                    <img src="${img}"
+                        class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">${title}</h5>
+                        <p class="card-text">${comment}</p>
+                        <p>${star_image}</p>
+                        <p class="mycomment">${desc}</p>
+                    </div></div>`
+                    $('#cards').append(temp_html)
+
+                })
+            })
+        })
+
+
+    </script>
 
 <body>
     <div class="mytitle">
         <h1>내 생애 최고의 영화들</h1>
+        <div>현재 서울의 날씨 : <span id="temp">20</span>도</div>
         <button>영화 기록하기</button>
     </div>
     <div class="mypost">
@@ -89,14 +130,14 @@
         <div class="input-group mb-3">
             <button class="btn btn-outline-secondary" type="button">별점</button>
             <select class="form-select" id="inputGroupSelect03" aria-label="Example select with button addon">
-              <option selected>선택하기</option>
-              <option value="1">⭐</option>
-              <option value="2">⭐⭐</option>
-              <option value="3">⭐⭐⭐</option>
-              <option value="4">⭐⭐⭐⭐</option>
-              <option value="5">⭐⭐⭐⭐⭐</option>
+                <option selected>선택하기</option>
+                <option value="1">⭐</option>
+                <option value="2">⭐⭐</option>
+                <option value="3">⭐⭐⭐</option>
+                <option value="4">⭐⭐⭐⭐</option>
+                <option value="5">⭐⭐⭐⭐⭐</option>
             </select>
-          </div>
+        </div>
         <div class="form-floating">
             <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">코멘트</label>
@@ -107,7 +148,7 @@
         </div>
     </div>
     <div class="mycards">
-        <div class="row row-cols-1 row-cols-md-4 g-4">
+        <div id="cards" class="row row-cols-1 row-cols-md-4 g-4">
             <div class="col">
                 <div class="card">
                     <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
